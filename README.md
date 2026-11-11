@@ -6,7 +6,7 @@
 ![Release](https://img.shields.io/github/v/release/ZsantiY/legion-del-mal-ry)
 ![Issues](https://img.shields.io/github/issues/ZsantiY/legion-del-mal-ry)
 ![Último commit](https://img.shields.io/github/last-commit/ZsantiY/legion-del-mal-ry)
-![Licencia](https://img.shields.io/github/license/ZsantiY/legion-del-mal-ry)
+![Licencia](https://img.shields.io/github/license/ZsantiY/legion-del-mal-ry?cacheSeconds=60)
 
 # 🦹‍♂️ La Legión del Mal
 
