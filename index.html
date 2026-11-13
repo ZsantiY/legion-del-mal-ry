@@ -1,3 +1,105 @@
-<!-- Se prepara el documento -->
-
-<!-- Esta maquina va a ser utiliza contra los terreneitors -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100d12">
+<title>Legión del Mal | Operación Caos</title>
+<style>
+:root{--bg:#100d12;--panel:#1b151d;--red:#e63946;--gold:#f4b942;--muted:#a99eaa;--line:#392b38}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#48202a 0,#171019 42%,#0b090d 100%);color:#f7edf2;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+header{padding:22px 5vw 14px;border-bottom:1px solid #4b2935;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.emblem{width:46px;height:46px;border:1px solid var(--red);border-radius:13px;display:grid;place-items:center;background:#2a121b;font-size:25px;box-shadow:0 0 24px #e6394630}
+h1{font-size:clamp(19px,3vw,27px);margin:0;letter-spacing:.08em;text-transform:uppercase}.subtitle{font-size:11px;color:var(--muted);letter-spacing:.2em}
+.status{font-size:12px;color:#f7c66b;border:1px solid #74542b;padding:8px 12px;border-radius:30px;background:#2b2115}
+main{width:min(1120px,92vw);margin:30px auto;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:20px}
+.game-panel,.side-panel{background:linear-gradient(145deg,#211821,#151117);border:1px solid var(--line);border-radius:17px;box-shadow:0 18px 55px #0006;overflow:hidden}
+.panel-head{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.panel-head h2{font-size:14px;letter-spacing:.13em;margin:0;text-transform:uppercase}.tag{font-size:10px;color:#ff9ba2;letter-spacing:.16em}
+#game{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#090d18;touch-action:manipulation;cursor:crosshair}
+.controls{padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+button{border:0;border-radius:9px;padding:11px 16px;background:linear-gradient(135deg,#e63946,#a91e35);color:white;font-weight:800;letter-spacing:.05em;cursor:pointer;box-shadow:0 6px 18px #e6394630}
+button:hover{filter:brightness(1.12)}button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.side-panel{padding:19px}.side-panel h3{margin:0 0 15px;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#100d13;border:1px solid #352735;border-radius:11px;padding:13px}.stat span{display:block;color:var(--muted);font-size:10px;letter-spacing:.12em}.stat strong{font-size:25px;color:#fff}
+.meter{height:7px;background:#392b38;border-radius:10px;overflow:hidden;margin-top:9px}.meter i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#e63946,#f4b942);transition:width .2s}
+.brief{margin-top:20px;padding:14px;border-left:3px solid var(--gold);background:#2a211b;border-radius:0 9px 9px 0;color:#d8c9c9;font-size:12px;line-height:1.6}
+.brief b{color:#f4c66e}.rules{margin-top:20px;color:var(--muted);font-size:11px;line-height:1.8}.rules strong{color:#eee}
+footer{text-align:center;color:#796e7b;font-size:10px;letter-spacing:.12em;padding:0 15px 25px}
+@media(max-width:800px){main{grid-template-columns:1fr}.side-panel{display:grid;grid-template-columns:1fr 1fr;gap:15px}.side-panel h3{grid-column:1/-1;margin-bottom:0}.brief,.rules{margin-top:0}}
+@media(max-width:480px){header{padding:16px 4vw}.side-panel{grid-template-columns:1fr}.brief,.rules{margin-top:5px}.controls{justify-content:center;text-align:center}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="emblem">☠</div><div><h1>La Legión del Mal</h1><div class="subtitle">CENTRO DE MANDO · DIVISIÓN ARCADE</div></div></div>
+  <div class="status">● SIMULACIÓN FICTICIA ACTIVA</div>
+</header>
+<main>
+  <section class="game-panel">
+    <div class="panel-head"><h2>Operación Caos</h2><span class="tag">PROTOCOLO DE ENTRENAMIENTO</span></div>
+    <canvas id="game" width="960" height="540" aria-label="Juego arcade: toca o haz clic para lanzar pulsos de energía a los drones ficticios"></canvas>
+    <div class="controls"><span>⌖ Toca o haz clic para lanzar pulsos de energía.</span><button id="startBtn">INICIAR MISIÓN</button></div>
+  </section>
+  <aside class="side-panel">
+    <h3>Panel del comandante</h3>
+    <div class="stats">
+      <div class="stat"><span>PUNTUACIÓN</span><strong id="score">0000</strong></div>
+      <div class="stat"><span>RÉCORD</span><strong id="best">0000</strong></div>
+      <div class="stat"><span>ESCUDOS</span><strong id="lives">3</strong><div class="meter"><i id="shieldBar"></i></div></div>
+      <div class="stat"><span>OLEADA</span><strong id="wave">1</strong></div>
+    </div>
+    <div class="brief"><b>OBJETIVO:</b> protege la guarida de los drones robóticos de entrenamiento. Derríbalos con pulsos de energía antes de que alcancen la base.</div>
+    <div class="rules"><strong>REGLAS DEL CONSEJO</strong><br>01 · Cada dron neutralizado suma puntos.<br>02 · Si un dron llega a la base, pierdes un escudo.<br>03 · La dificultad aumenta con cada oleada.<br>04 · Esto es un minijuego ficticio: no representa países ni objetivos reales.</div>
+  </aside>
+</main>
+<footer>LEGIÓN DEL MAL // SIMULADOR ARCADE // ACCESO AUTORIZADO AL CONSEJO</footer>
+<script>
+(()=>{
+ const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+ const $=id=>document.getElementById(id);
+ let running=false,score=0,lives=3,wave=1,frames=0,targets=[],shots=[],sparks=[],best=Number(localStorage.getItem('legionBest')||0),last=0;
+ $('best').textContent=String(best).padStart(4,'0');
+ const W=960,H=540;
+ function reset(){score=0;lives=3;wave=1;frames=0;targets=[];shots=[];sparks=[];running=true;last=0;update();$('startBtn').textContent='REINICIAR MISIÓN';}
+ function update(){$('score').textContent=String(score).padStart(4,'0');$('lives').textContent=lives;$('wave').textContent=wave;$('shieldBar').style.width=(lives/3*100)+'%';$('best').textContent=String(best).padStart(4,'0');}
+ function background(){
+  let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#101b32');g.addColorStop(1,'#090d18');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#ffffff';for(let i=0;i<75;i++){let x=(i*137)%W,y=(i*71)%390;ctx.globalAlpha=.25+(i%4)*.13;ctx.fillRect(x,y,2,2)}ctx.globalAlpha=1;
+  ctx.fillStyle='#172b32';ctx.beginPath();ctx.moveTo(0,450);ctx.lineTo(130,390);ctx.lineTo(250,440);ctx.lineTo(390,375);ctx.lineTo(540,440);ctx.lineTo(700,385);ctx.lineTo(850,430);ctx.lineTo(960,390);ctx.lineTo(960,540);ctx.lineTo(0,540);ctx.fill();
+  ctx.fillStyle='#263d3b';ctx.fillRect(0,480,W,60);
+  ctx.fillStyle='#e63946';ctx.fillRect(0,477,W,3);
+  ctx.fillStyle='#f4b942';ctx.font='bold 15px system-ui';ctx.fillText('GUARIDA DE LA LEGIÓN',25,515);
+ }
+ function base(){ctx.save();ctx.translate(480,465);ctx.fillStyle='#202b37';ctx.fillRect(-72,-25,144,50);ctx.fillStyle='#e63946';ctx.fillRect(-85,-32,170,8);ctx.fillStyle='#52616e';ctx.fillRect(-35,-53,70,28);ctx.fillStyle='#f4b942';ctx.beginPath();ctx.arc(0,-39,8,0,Math.PI*2);ctx.fill();ctx.restore();}
+ function drawTarget(t){ctx.save();ctx.translate(t.x,t.y);ctx.rotate(Math.sin(t.phase)*.08);ctx.fillStyle='#8d3448';ctx.strokeStyle='#ff8290';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-25,-12);ctx.lineTo(-12,-24);ctx.lineTo(13,-24);ctx.lineTo(27,-8);ctx.lineTo(22,16);ctx.lineTo(-20,16);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#ffd166';ctx.fillRect(-9,-7,18,7);ctx.fillStyle='#303a4c';ctx.fillRect(-34,-5,9,20);ctx.fillRect(25,-5,9,20);ctx.restore();}
+ function drawShot(s){ctx.strokeStyle='#68f7ff';ctx.lineWidth=5;ctx.shadowBlur=15;ctx.shadowColor='#68f7ff';ctx.beginPath();ctx.moveTo(s.x,s.y+12);ctx.lineTo(s.x,s.y-12);ctx.stroke();ctx.shadowBlur=0;}
+ function drawSparks(){for(const p of sparks){ctx.globalAlpha=Math.max(0,p.life/24);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;}
+ function spawn(){targets.push({x:55+Math.random()*850,y:-25,speed:1.2+wave*.25+Math.random()*.7,phase:Math.random()*6});}
+ function fire(x,y){if(!running)return;shots.push({x,y:Math.min(y,455),speed:8});}
+ canvas.addEventListener('pointerdown',e=>{const r=canvas.getBoundingClientRect();fire((e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height)});
+ function end(){running=false;ctx.fillStyle='#07090dbb';ctx.fillRect(0,0,W,H);ctx.textAlign='center';ctx.fillStyle='#ff6675';ctx.font='900 48px system-ui';ctx.fillText('MISIÓN FALLIDA',480,245);ctx.fillStyle='#fff';ctx.font='20px system-ui';ctx.fillText('Puntuación: '+score+' · Pulsa “Reiniciar misión”',480,285);ctx.textAlign='left';}
+ function loop(ts){if(!running){requestAnimationFrame(loop);return}
+  if(!last)last=ts;let dt=Math.min((ts-last)/16.67,2);last=ts;frames++;
+  background();base();
+  if(frames%(Math.max(24,76-wave*5))<dt)spawn();
+  shots.forEach(s=>s.y-=s.speed*dt);
+  targets.forEach(t=>{t.y+=t.speed*dt;t.phase+=.04*dt});
+  for(let i=targets.length-1;i>=0;i--){let t=targets[i],hit=false;for(let j=shots.length-1;j>=0;j--){let s=shots[j];if(Math.hypot(t.x-s.x,t.y-s.y)<28){shots.splice(j,1);targets.splice(i,1);score+=10;hit=true;for(let k=0;k<9;k++)sparks.push({x:t.x,y:t.y,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,life:24,color:k%2?'#f4b942':'#68f7ff'});break;}}
+   if(!hit&&t.y>470){targets.splice(i,1);lives--;update();if(lives<=0){end();return;}}
+  }
+  shots=shots.filter(s=>s.y>-20);
+  sparks.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});sparks=sparks.filter(p=>p.life>0);
+  targets.forEach(drawTarget);shots.forEach(drawShot);drawSparks();
+  let nextWave=1+Math.floor(score/100);if(nextWave>wave){wave=nextWave;update()}
+  if(score>best){best=score;localStorage.setItem('legionBest',best);update()}
+  requestAnimationFrame(loop);
+ }
+ $('startBtn').addEventListener('click',()=>{reset()});
+ background();base();ctx.fillStyle='#fff';ctx.textAlign='center';ctx.font='bold 30px system-ui';ctx.fillText('OPERACIÓN CAOS',480,225);ctx.font='17px system-ui';ctx.fillStyle='#c5cbd6';ctx.fillText('Pulsa “Iniciar misión” para comenzar',480,263);ctx.textAlign='left';
+ requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
